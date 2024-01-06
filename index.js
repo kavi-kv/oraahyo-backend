@@ -7,7 +7,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import xikmadoRoutes from "./routes/xikmado.js"
-
+import authRouter from "./routes/authRouter.js";
 
 import QuotesModel from "./Models/QuotesModel.js";
 import { quotesWithOutAuther } from "./data/index.js";
@@ -25,18 +25,19 @@ app.use(cors());
 
 /* ROUTES */
 app.use("/xikmado", xikmadoRoutes);
-// app.use("/oraahyo", oraahyoRoutes);
+app.use(authRouter);
 
-/* MONGOOSE */
-
-const Port = process.env.PORT || 5009
+const PORT = process.env.PORT || 5005;
 const dbName = "oraahyo";
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    
+
 })
 .then(()=> {
-    app.listen(5005 , () => console.log("Server Port is on", Port, " ", dbName));
+    app.listen(5005 , () => console.log("Server Port is on", PORT, " ", dbName));
+    console.log(`Connection Successfully`);
 
     /* Add Data Only Once */
     // QuotesModel.insertMany(quotesWithOutAuther);
