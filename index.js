@@ -8,6 +8,7 @@ import morgan from "morgan";
 
 import xikmadoRoutes from "./routes/xikmado.js"
 import authRouter from "./routes/authRouter.js";
+import favRoutes from "./routes/favAuth.js"
 
 import QuotesModel from "./Models/QuotesModel.js";
 import { quotesWithOutAuther } from "./data/index.js";
@@ -26,6 +27,7 @@ app.use(cors());
 /* ROUTES */
 app.use("/xikmado", xikmadoRoutes);
 app.use(authRouter);
+app.use(favRoutes);
 
 const PORT = process.env.PORT || 5005;
 const dbName = "oraahyo";

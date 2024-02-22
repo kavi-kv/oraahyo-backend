@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+const { Schema } = mongoose;
+
 const userSchema = new mongoose.Schema({
     name: {
         required: true,
@@ -18,10 +20,18 @@ const userSchema = new mongoose.Schema({
             message: "Please enter a valid email address."
         },
     },
+    type: {
+        required: true,
+        type: String
+    },
     password: {
         required: true,
         type: String,
     },
+    favorites: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Favorite'
+    }]
 })
 
 const User = mongoose.model("User", userSchema)
