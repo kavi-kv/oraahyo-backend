@@ -15,16 +15,20 @@ export const signIn = async (req, res) => {
         .status(400)
         .json({ msg: "User with the provided email doesn't exist." });
     }
+    // if (user.type != "User") {
+    //   return res
+    //     .status(401)
+    //     .json({ msg: "Error on user Type." });
+    // }
 
     const isPassMatch = await bcryptjs.compare(password, user.password);
     if (!isPassMatch) {
       return res.status(400).json({ msg: "Incorrect Password or email." });
     }
-    if (user.type === "user") {
+    if (user.type === "User") {
       const token = jwt.sign({ id: user._id }, "passwordKey");
       res.json({ token, ...user._doc });
-    }
-    else{
+    } else {
       res.status(400).json({ error: `Invalid User Type!: ${error.message}` });
     }
   } catch (error) {
@@ -50,8 +54,7 @@ export const signInAsAdmin = async (req, res) => {
     if (user.type === "Admin") {
       const token = jwt.sign({ id: user._id }, "passwordKey");
       res.json({ token, ...user._doc });
-    }
-    else{
+    } else {
       res.status(400).json({ error: `Invalid User Type!: ${error.message}` });
     }
   } catch (error) {
@@ -62,6 +65,31 @@ export const signInAsAdmin = async (req, res) => {
 export const signUp = async (req, res) => {
   try {
     const { name, email, password, type = "Admin" } = req.body;
+
+    const isExisted = await User.findOne({ email });
+
+    if (isExisted) {
+      return res.status(400).json({ msg: "User Already exists!." });
+    }
+
+    const hashedPassword = await bcryptjs.hash(password, 8);
+
+    let user = new User({
+      email,
+      password: hashedPassword,
+      name,
+      type,
+    });
+
+    user = await user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+export const signUpAsUser = async (req, res) => {
+  try {
+    const { name, email, password, type = "User" } = req.body;
 
     const isExisted = await User.findOne({ email });
 

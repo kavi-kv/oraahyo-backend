@@ -1,13 +1,13 @@
 import express from "express"
 const authRouter = express.Router();
-import { signUp,signIn,tokenValidation,getUser,signInAsAdmin } from '../Controllers/authController.js'
+import { signUp,signIn,tokenValidation,getUser,signInAsAdmin,signUpAsUser } from '../Controllers/authController.js'
 import auth from "../middleware/auth.js";
 import User from "../Models/userModel.js";
 
-authRouter.post("/api/signup", signUp)
-authRouter.post("/api/signin", signIn)
-authRouter.post("/api/signin", signIn)
-authRouter.post("/api/signinadmin", signInAsAdmin)
+authRouter.post("/api/signUpAsAdmin", signUp)
+authRouter.post("/api/signupAsUser", signUpAsUser)
+authRouter.post("/api/signinAsUser", signIn)
+authRouter.post("/api/signinAdmin", signInAsAdmin)
 
 authRouter.post("/tokenIsValid", tokenValidation)
 

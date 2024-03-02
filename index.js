@@ -6,12 +6,18 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
 
-import xikmadoRoutes from "./routes/xikmado.js"
+import xikmadoRoutes from "./routes/xikmado.js";
 import authRouter from "./routes/authRouter.js";
-import favRoutes from "./routes/favAuth.js"
+import favRoutes from "./routes/favAuth.js";
+import noticeRouter from "./routes/NoticeRoutes.js";
 
 import QuotesModel from "./Models/QuotesModel.js";
 import { quotesWithOutAuther } from "./data/index.js";
+
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+// };
+
 
 
 /* CONFIGUARIONS */
@@ -28,21 +34,20 @@ app.use(cors());
 app.use("/xikmado", xikmadoRoutes);
 app.use(authRouter);
 app.use(favRoutes);
+app.use(noticeRouter);
 
 const PORT = process.env.PORT || 5005;
 const dbName = "oraahyo";
-mongoose.connect(process.env.MONGO_URL, {
+mongoose
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    
-
-})
-.then(()=> {
-    app.listen(5005 , () => console.log("Server Port is on", PORT, " ", dbName));
+  })
+  .then(() => {
+    app.listen(5005, () => console.log("Server Port is on", PORT, " ", dbName));
     console.log(`Connection Successfully`);
 
     /* Add Data Only Once */
     // QuotesModel.insertMany(quotesWithOutAuther);
-    
-})
-.catch((error)=> console.log(`${error} did not connect!`))
+  })
+  .catch((error) => console.log(`${error} did not connect!`));
