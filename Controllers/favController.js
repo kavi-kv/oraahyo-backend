@@ -58,6 +58,7 @@ export const removeFromFavorite = async (req,res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
 export const readFavByUser = async (req,res) => {
     try{
         const { _id } = req.params;
@@ -73,5 +74,19 @@ export const readFavByUser = async (req,res) => {
     }
     catch(error){
         res.status(500).json({ message: error.message })
+    }
+}
+
+export const getFavoriteByFavId = async (req,res) => {
+    try{
+        const { _id } = req.params;
+        const favQuote = await favoriteModel.findById(_id)
+        if(!favQuote){
+            return res.status(400).json({ message: `No Favorite with the provided Id is found` })
+        }
+        return res.status(200).json({ favQuote });
+    }
+    catch(error){
+        return res.status(500).json({ message: `failed to get favorite by fav Id: ${error}` })
     }
 }
